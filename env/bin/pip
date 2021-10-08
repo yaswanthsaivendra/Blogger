@@ -1,4 +1,4 @@
-#!/home/yaswanth/my_projects/flask_blog/env/bin/python
+#!/home/yaswanth/my_projects/flask_blog/Blogger/env/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
