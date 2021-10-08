@@ -11,7 +11,7 @@ users = Blueprint('users', __name__)
 @users.route('/register/', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('users.home'))
+        return redirect(url_for('main.home'))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -25,7 +25,7 @@ def register():
 @users.route('/login/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('users.home'))
+        return redirect(url_for('main.home'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -35,7 +35,7 @@ def login():
             if next_page:
                 return redirect(next_page)
             else:
-                return redirect(url_for('users.home'))
+                return redirect(url_for('main.home'))
         else:
             flash("Login Unsuccessful. Please check email and password", 'danger')
     return render_template('login.html', title='Login', form=form)
@@ -43,7 +43,7 @@ def login():
 @users.route('/logout/')
 def logout():
     logout_user()
-    return redirect(url_for('users.home'))
+    return redirect(url_for('main.home'))
 
 
 @users.route('/account/', methods=['GET', 'POST'])
@@ -78,7 +78,7 @@ def user_posts(username):
 @users.route('/reset_password', methods=['GET', 'POST'])
 def reset_request():
     if current_user.is_authenticated :
-        return redirect(url_for('users.home'))
+        return redirect(url_for('main.home'))
     form = RequestResetForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -91,11 +91,11 @@ def reset_request():
 @users.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_token(token):
     if current_user.is_authenticated :
-        return redirect(url_for('users.home'))
+        return redirect(url_for('main.home'))
     user = User.verify_reset_token(token)
     if user is None:
         flash('That is an invalid or expired token', 'warning')
-        return redirect(url_for('users.reser_request'))
+        return redirect(url_for('users.reset_request'))
     form = ResetPasswordForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
